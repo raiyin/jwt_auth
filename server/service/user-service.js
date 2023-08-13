@@ -6,6 +6,7 @@ const tokenService = require('./token-service');
 const UserDto = require('../dtos/user-dto');
 
 class UserService {
+
     async registration(email, password) {
         const candidate = await userModel.findOne({ email });
         if (candidate) {
@@ -28,6 +29,16 @@ class UserService {
             ...tokens,
             user: userDto
         };
+    }
+
+    async activate(activationLink) {
+        const user = await userModel.findOne({ activationLink });
+        if (!user) {
+            throw new Error('Некорректная ссылка активации');
+        }
+
+        user.isActivated = true;
+        await user.save();
     }
 }
 

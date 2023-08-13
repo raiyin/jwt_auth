@@ -31,9 +31,12 @@ class UserController {
 
     async activate(req, res, next) {
         try {
-
+            // Получается из адресной строки.
+            const activationLink = req.params.link;
+            await userService.activate(activationLink);
+            return res.redirect(process.env.CLIENT_URL);
         } catch (e) {
-
+            console.log(e);
         }
     }
 
