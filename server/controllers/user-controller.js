@@ -30,9 +30,12 @@ class UserController {
         }
     }
 
-    async lougout(req, res, next) {
+    async logout(req, res, next) {
         try {
-
+            const { refreshToken } = req.cookies;
+            const token = await userService.logout(refreshToken);
+            res.clearCookie('refreshToken');
+            return res.json(token); // 200 is better.
         } catch (e) {
             next(e);
         }
